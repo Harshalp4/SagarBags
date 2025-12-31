@@ -1169,21 +1169,29 @@ p {
   transform: translateX(4px);
 }
 
-.hero-category-icon {
-  width: 48px;
-  height: 48px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(201, 162, 39, 0.1);
-  border-radius: 10px;
+.hero-category-image {
+  width: 56px;
+  height: 56px;
+  border-radius: 12px;
+  overflow: hidden;
   flex-shrink: 0;
+  border: 2px solid rgba(201, 162, 39, 0.3);
+  transition: all 0.3s ease;
 }
 
-.hero-category-icon svg {
-  width: 24px;
-  height: 24px;
-  color: var(--secondary);
+.hero-category-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.hero-category-card:hover .hero-category-image {
+  border-color: var(--secondary);
+}
+
+.hero-category-card:hover .hero-category-image img {
+  transform: scale(1.1);
 }
 
 .hero-category-content {
