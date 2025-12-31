@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="View our gallery of promotional bags - corporate bags, jute bags, non-woven bags, and custom branded bags delivered to clients across India.">
+  <title>Gallery | Sagar Bags - Our Work Showcase</title>
+
+  <link rel="icon" type="image/svg+xml" href="assets/images/logo/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/styles.css">
+  <link rel="stylesheet" href="assets/css/responsive.css">
+
+  <style>
+    .gallery-section {
+      padding: 4rem 0;
+    }
+
+    .gallery-filters {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.75rem;
+      margin-bottom: 3rem;
+    }
+
+    .filter-btn {
+      padding: 0.625rem 1.25rem;
+      border: 1px solid var(--gray-300);
+      border-radius: var(--radius-full);
+      background: var(--white);
+      font-size: 0.9375rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all var(--transition);
+    }
+
+    .filter-btn:hover,
+    .filter-btn.active {
+      background: var(--primary);
+      color: var(--white);
+      border-color: var(--primary);
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.5rem;
+    }
+
+    .gallery-item {
+      position: relative;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      cursor: pointer;
+      aspect-ratio: 1;
+    }
+
+    .gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform var(--transition-slow);
+    }
+
+    .gallery-item:hover img {
+      transform: scale(1.1);
+    }
+
+    .gallery-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(30, 58, 95, 0.9) 0%, transparent 60%);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 1.5rem;
+      opacity: 0;
+      transition: opacity var(--transition);
+    }
+
+    .gallery-item:hover .gallery-overlay {
+      opacity: 1;
+    }
+
+    .gallery-title {
+      color: var(--white);
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+    }
+
+    .gallery-category {
+      color: var(--secondary);
+      font-size: 0.875rem;
+    }
+
+    .gallery-zoom {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0);
+      width: 50px;
+      height: 50px;
+      background: var(--white);
+      border-radius: var(--radius-full);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform var(--transition);
+    }
+
+    .gallery-item:hover .gallery-zoom {
+      transform: translate(-50%, -50%) scale(1);
+    }
+
+    .gallery-zoom svg {
+      width: 24px;
+      height: 24px;
+      color: var(--primary);
+    }
+
+    /* Featured Items - larger */
+    .gallery-item.featured {
+      grid-column: span 2;
+      grid-row: span 2;
+    }
+
+    /* Lightbox */
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.95);
+      z-index: 2000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: all var(--transition);
+    }
+
+    .lightbox.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .lightbox-content {
+      max-width: 90%;
+      max-height: 90%;
+      position: relative;
+    }
+
+    .lightbox-content img {
+      max-width: 100%;
+      max-height: 85vh;
+      object-fit: contain;
+      border-radius: var(--radius-lg);
+    }
+
+    .lightbox-caption {
+      text-align: center;
+      color: var(--white);
+      margin-top: 1rem;
+    }
+
+    .lightbox-caption h4 {
+      color: var(--white);
+      margin-bottom: 0.25rem;
+    }
+
+    .lightbox-caption p {
+      color: var(--gray-400);
+      margin: 0;
+    }
+
+    .lightbox-close {
+      position: absolute;
+      top: 2rem;
+      right: 2rem;
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--white);
+      border-radius: var(--radius-full);
+      cursor: pointer;
+      transition: all var(--transition);
+    }
+
+    .lightbox-close:hover {
+      transform: rotate(90deg);
+    }
+
+    .lightbox-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--white);
+      border-radius: var(--radius-full);
+      cursor: pointer;
+      transition: all var(--transition);
+    }
+
+    .lightbox-nav:hover {
+      background: var(--secondary);
+    }
+
+    .lightbox-prev { left: 2rem; }
+    .lightbox-next { right: 2rem; }
+
+    @media (max-width: 992px) {
+      .gallery-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .gallery-item.featured {
+        grid-column: span 2;
+        grid-row: span 1;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .gallery-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+      }
+
+      .gallery-item.featured {
+        grid-column: span 2;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .gallery-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .gallery-item.featured {
+        grid-column: span 1;
+      }
+
+      .lightbox-nav {
+        width: 40px;
+        height: 40px;
+      }
+
+      .lightbox-prev { left: 1rem; }
+      .lightbox-next { right: 1rem; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="header-container">
+      <a href="index.html" class="logo">
+        <div class="logo-text">Sagar<span>Bags</span></div>
+      </a>
+      <nav class="nav-menu">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="products.html" class="nav-link">Products</a>
+        <a href="about.html" class="nav-link">About Us</a>
+        <a href="gallery.html" class="nav-link active">Gallery</a>
+        <a href="contact.html" class="nav-link">Contact</a>
+      </nav>
+      <div class="header-actions">
+        <button class="header-icon cart-icon" aria-label="Quote Cart">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+          </svg>
+          <span class="icon-badge cart-count" style="display: none;">0</span>
+        </button>
+        <a href="contact.html" class="btn btn-primary btn-sm">Get Quote</a>
+        <button class="menu-toggle" aria-label="Toggle menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- Gallery Section - Compact for Mobile -->
+    <section class="gallery-section" style="padding-top: 1.5rem;">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">Our Work</h2>
+          <p class="section-subtitle">Browse through our collection of custom promotional bags delivered to clients across India</p>
+        </div>
+
+        <!-- Filters -->
+        <div class="gallery-filters">
+          <button class="filter-btn active" data-filter="all">All</button>
+          <button class="filter-btn" data-filter="corporate">Corporate Bags</button>
+          <button class="filter-btn" data-filter="non-woven">Non-Woven Bags</button>
+          <button class="filter-btn" data-filter="jute">Jute & Cotton</button>
+          <button class="filter-btn" data-filter="travel">Travel Bags</button>
+          <button class="filter-btn" data-filter="custom">Custom Projects</button>
+        </div>
+
+        <!-- Gallery Grid -->
+        <div class="gallery-grid" id="galleryGrid">
+          <!-- Featured Item - Corporate Backpack -->
+          <div class="gallery-item featured" data-category="corporate" data-index="0">
+            <img src="https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=800&h=800&fit=crop" alt="Corporate Laptop Backpacks">
+            <div class="gallery-overlay">
+              <div class="gallery-zoom">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
+                </svg>
+              </div>
+              <h4 class="gallery-title">Corporate Laptop Backpacks</h4>
+              <span class="gallery-category">Corporate Event - 500 pcs</span>
+            </div>
+          </div>
+
+          <div class="gallery-item" data-category="non-woven" data-index="1">
+            <img src="https://images.unsplash.com/photo-1590874103328-eac38a683ce7?w=600&h=600&fit=crop" alt="Non-Woven Shopping Bags">
+            <div class="gallery-overlay">
+              <div class="gallery-zoom">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
+                </svg>
+              </div>
+              <h4 class="gallery-title">Non-Woven Shopping Bags</h4>
+              <span class="gallery-category">Retail Store - 2000 pcs</span>
+            </div>
+          </div>
+
+          <div class="gallery-item" data-category="jute" data-index="2">
+            <img src="https://images.unsplash.com/photo-1605733160314-4fc7dac4bb16?w=600&h=600&fit=crop" alt="Eco-Friendly Jute Bags">
+            <div class="gallery-overlay">
+              <div class="gallery-zoom">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
+                </svg>
+              </div>
+              <h4 class="gallery-title">Eco-Friendly Jute Bags</h4>
+              <span class="gallery-category">Organic Brand - 1000 pcs</span>
+            </div>
+          </div>
+
+          <div class="gallery-item" data-category="travel" data-index="3">
+            <img src="https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=600&h=600&fit=crop" alt="Duffel Travel Bags">
+            <div class="gallery-overlay">
+              <div class="gallery-zoom">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
+                </svg>
+              </div>
+              <h4 class="gallery-title">Duffel Travel Bags</h4>
+              <span class="gallery-category">Sports Team - 200 pcs</span>
+            </div>
+          </div>
+
+          <div class="gallery-item" data-category="corporate" data-index="4">
+            <img src="https://images.unsplash.com/photo-1622560480605-d83c853bc5c3?w=600&h=600&fit=crop" alt="Executive Laptop Bags">
+            <div class="gallery-overlay">
+              <div class="gallery-zoom">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
+                </svg>
+              </div>
+              <h4 class="gallery-title">Executive Laptop Bags</h4>
+              <span class="gallery-category">IT Company - 300 pcs</span>
+            </div>
+          </div>
+
+          <div class="gallery-item" data-category="custom" data-index="5">
+            <img src="https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=600&h=600&fit=crop" alt="Custom Tote Bags">
+            <div class="gallery-overlay">
+              <div class="gallery-zoom">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
+                </svg>
+              </div>
+              <h4 class="gallery-title">Custom Tote Bags</h4>
+              <span class="gallery-category">Beauty Brand - 1500 pcs</span>
+            </div>
+          </div>
+
+          <div class="gallery-item featured" data-category="jute" data-index="6">
+            <img src="https://images.unsplash.com/photo-1544816155-12df9643f363?w=800&h=800&fit=crop" alt="Canvas Tote Bags">
+            <div class="gallery-overlay">
+              <div class="gallery-zoom">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
+                </svg>
+              </div>
+              <h4 class="gallery-title">Canvas Tote Bags</h4>
+              <span class="gallery-category">Fashion Brand - 800 pcs</span>
+            </div>
+          </div>
+
+          <div class="gallery-item" data-category="non-woven" data-index="7">
+            <img src="https://images.unsplash.com/photo-1491637639811-60e2756cc1c7?w=600&h=600&fit=crop" alt="D-Cut Non-Woven Bags">
+            <div class="gallery-overlay">
+              <div class="gallery-zoom">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
+                </svg>
+              </div>
+              <h4 class="gallery-title">D-Cut Non-Woven Bags</h4>
+              <span class="gallery-category">Grocery Chain - 5000 pcs</span>
+            </div>
+          </div>
+
+          <div class="gallery-item" data-category="corporate" data-index="8">
+            <img src="https://images.unsplash.com/photo-1581605405669-fcdf81165afa?w=600&h=600&fit=crop" alt="School Backpacks">
+            <div class="gallery-overlay">
+              <div class="gallery-zoom">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
+                </svg>
+              </div>
+              <h4 class="gallery-title">School Backpacks</h4>
+              <span class="gallery-category">Educational Institute - 2000 pcs</span>
+            </div>
+          </div>
+
+          <div class="gallery-item" data-category="custom" data-index="9">
+            <img src="https://images.unsplash.com/photo-1575844261959-bb0f5bbe3f7d?w=600&h=600&fit=crop" alt="Custom Conference Bags">
+            <div class="gallery-overlay">
+              <div class="gallery-zoom">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
+                </svg>
+              </div>
+              <h4 class="gallery-title">Custom Conference Bags</h4>
+              <span class="gallery-category">Conference - 1200 pcs</span>
+            </div>
+          </div>
+
+          <div class="gallery-item" data-category="travel" data-index="10">
+            <img src="https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=600&h=600&fit=crop&sat=-30" alt="Gym Duffel Bags">
+            <div class="gallery-overlay">
+              <div class="gallery-zoom">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
+                </svg>
+              </div>
+              <h4 class="gallery-title">Gym Duffel Bags</h4>
+              <span class="gallery-category">Fitness Club - 500 pcs</span>
+            </div>
+          </div>
+
+          <div class="gallery-item" data-category="jute" data-index="11">
+            <img src="https://images.unsplash.com/photo-1559563458-527698bf5295?w=600&h=600&fit=crop" alt="Jute Wine Bottle Bags">
+            <div class="gallery-overlay">
+              <div class="gallery-zoom">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
+                </svg>
+              </div>
+              <h4 class="gallery-title">Jute Gift Bags</h4>
+              <span class="gallery-category">Wine Store - 3000 pcs</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+      <div class="container">
+        <div class="cta-container">
+          <h2>Like What You See?</h2>
+          <p>Let us create stunning promotional bags for your brand too!</p>
+          <div class="cta-buttons">
+            <a href="contact.html" class="btn btn-primary btn-lg">Get Started</a>
+            <a href="products.html" class="btn btn-outline btn-lg">View Products</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="logo"><div class="logo-text">Sagar<span>Bags</span></div></div>
+          <p>Leading promotional bag manufacturer in India with 20+ years of excellence.</p>
+        </div>
+        <div class="footer-column">
+          <h4 class="footer-title">Quick Links</h4>
+          <div class="footer-links">
+            <a href="index.html">Home</a>
+            <a href="products.html">Products</a>
+            <a href="about.html">About Us</a>
+            <a href="contact.html">Contact</a>
+          </div>
+        </div>
+        <div class="footer-column">
+          <h4 class="footer-title">Contact</h4>
+          <div class="footer-contact">
+            <div class="footer-contact-item">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg>
+              <span>+91 98695 09070</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2024 Sagar Bags. All rights reserved.</p>
+        <div class="footer-bottom-links">
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Service</a>
+          <a href="admin.html" class="admin-link">Admin</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- WhatsApp Float -->
+  <a href="https://wa.me/919869509070" class="whatsapp-float" target="_blank">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+  </a>
+
+  <!-- Cart Drawer -->
+  <div class="cart-overlay"></div>
+  <div class="cart-drawer">
+    <div class="cart-header"><h3>Quote Cart</h3><button class="cart-close"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg></button></div>
+    <div class="cart-body"></div>
+    <div class="cart-footer" style="display: none;"><div class="cart-actions"><button class="btn btn-whatsapp">Send via WhatsApp</button><button class="btn btn-email">Send via Email</button></div></div>
+  </div>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox">
+    <button class="lightbox-close" onclick="closeLightbox()">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+    </button>
+    <button class="lightbox-nav lightbox-prev" onclick="prevImage()">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
+    </button>
+    <div class="lightbox-content">
+      <img src="" alt="" id="lightboxImage">
+      <div class="lightbox-caption">
+        <h4 id="lightboxTitle"></h4>
+        <p id="lightboxCategory"></p>
+      </div>
+    </div>
+    <button class="lightbox-nav lightbox-next" onclick="nextImage()">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+    </button>
+  </div>
+
+  <script src="assets/js/products-data.js"></script>
+  <script src="assets/js/main.js"></script>
+  <script src="assets/js/cart.js"></script>
+  <script src="assets/js/favorites.js"></script>
+
+  <script>
+    let galleryItems = [];
+    let currentIndex = 0;
+    let filteredItems = [];
+
+    document.addEventListener('DOMContentLoaded', () => {
+      galleryItems = Array.from(document.querySelectorAll('.gallery-item'));
+      filteredItems = [...galleryItems];
+
+      // Filter buttons
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+
+          const filter = btn.dataset.filter;
+
+          galleryItems.forEach(item => {
+            if (filter === 'all' || item.dataset.category === filter) {
+              item.style.display = '';
+            } else {
+              item.style.display = 'none';
+            }
+          });
+
+          filteredItems = galleryItems.filter(item =>
+            filter === 'all' || item.dataset.category === filter
+          );
+        });
+      });
+
+      // Gallery item click
+      galleryItems.forEach((item, index) => {
+        item.addEventListener('click', () => {
+          currentIndex = filteredItems.indexOf(item);
+          openLightbox();
+        });
+      });
+
+      // Keyboard navigation
+      document.addEventListener('keydown', (e) => {
+        if (document.getElementById('lightbox').classList.contains('active')) {
+          if (e.key === 'Escape') closeLightbox();
+          if (e.key === 'ArrowLeft') prevImage();
+          if (e.key === 'ArrowRight') nextImage();
+        }
+      });
+    });
+
+    function openLightbox() {
+      const item = filteredItems[currentIndex];
+      const img = item.querySelector('img');
+      const title = item.querySelector('.gallery-title').textContent;
+      const category = item.querySelector('.gallery-category').textContent;
+
+      document.getElementById('lightboxImage').src = img.src;
+      document.getElementById('lightboxTitle').textContent = title;
+      document.getElementById('lightboxCategory').textContent = category;
+      document.getElementById('lightbox').classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox() {
+      document.getElementById('lightbox').classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    function prevImage() {
+      currentIndex = (currentIndex - 1 + filteredItems.length) % filteredItems.length;
+      openLightbox();
+    }
+
+    function nextImage() {
+      currentIndex = (currentIndex + 1) % filteredItems.length;
+      openLightbox();
+    }
+  </script>
+</body>
+</html>
