@@ -1108,21 +1108,65 @@ p {
 
 /* -------------------- Hero Categories (Mobile-first) -------------------- */
 .hero-categories-wrapper {
-  display: flex;
-  flex-direction: column;
-  gap: 1.25rem;
-  padding: 1.5rem;
-  background: linear-gradient(135deg, rgba(201, 162, 39, 0.08) 0%, rgba(201, 162, 39, 0.03) 100%);
-  border: 1px solid rgba(201, 162, 39, 0.25);
-  border-radius: 16px;
   position: relative;
+  border-radius: 16px;
+  overflow: hidden;
   z-index: 2;
+  min-height: 320px;
 }
 
 @media (min-width: 768px) {
   .hero-categories-wrapper {
-    padding: 2rem;
     border-radius: 20px;
+    min-height: 380px;
+  }
+}
+
+/* Background Image */
+.hero-categories-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.hero-categories-bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.hero-categories-wrapper:hover .hero-categories-bg img {
+  transform: scale(1.05);
+}
+
+/* Dark Overlay */
+.hero-categories-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(0, 0, 0, 0.85) 0%,
+    rgba(0, 0, 0, 0.7) 50%,
+    rgba(0, 0, 0, 0.85) 100%
+  );
+  z-index: 1;
+}
+
+/* Content Layer */
+.hero-categories-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: 1.5rem;
+  height: 100%;
+}
+
+@media (min-width: 768px) {
+  .hero-categories-content {
+    padding: 2rem;
     gap: 1.5rem;
   }
 }
@@ -1164,42 +1208,18 @@ p {
   align-items: center;
   gap: 1rem;
   padding: 1rem;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 12px;
   transition: all 0.3s ease;
   text-decoration: none;
 }
 
 .hero-category-card:hover {
-  background: rgba(201, 162, 39, 0.1);
-  border-color: rgba(201, 162, 39, 0.3);
+  background: rgba(201, 162, 39, 0.2);
+  border-color: rgba(201, 162, 39, 0.5);
   transform: translateX(4px);
-}
-
-.hero-category-image {
-  width: 56px;
-  height: 56px;
-  border-radius: 12px;
-  overflow: hidden;
-  flex-shrink: 0;
-  border: 2px solid rgba(201, 162, 39, 0.3);
-  transition: all 0.3s ease;
-}
-
-.hero-category-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.3s ease;
-}
-
-.hero-category-card:hover .hero-category-image {
-  border-color: var(--secondary);
-}
-
-.hero-category-card:hover .hero-category-image img {
-  transform: scale(1.1);
 }
 
 .hero-category-content {
